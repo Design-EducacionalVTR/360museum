@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museu Virtual 360° - Experiência Interativa</title>
+    <meta name="description" content="Explore um museu virtual em 360° com obras de arte famosas. Compatível com navegadores web e dispositivos VR.">
+    
+    <!-- A-Frame -->
+    <script src="lib/aframe.min.js"></script>
+    <script src="lib/aframe-environment-component.min.js"></script>
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/vr-ui.css">
+</head>
+<body>
+    <!-- Interface de carregamento -->
+    <div id="loading-screen" class="hidden">
+        <div class="loading-content">
+            <h1>Museu Virtual 360°</h1>
+            <div class="loading-spinner"></div>
+            <p>Carregando experiência...</p>
+        </div>
+    </div>
+
+    <!-- Interface de instruções -->
+    <div id="instructions-panel" class="ui-panel">
+        <div class="panel-content">
+            <h2>Bem-vindo ao Museu Virtual</h2>
+            <p>Use o mouse para olhar ao redor e clique nas obras de arte para obter informações.</p>
+            <p>Para VR: Use os controladores para apontar e selecionar.</p>
+            <button id="start-experience">Iniciar Experiência</button>
+        </div>
+    </div>
+
+    <!-- Painel de informações das obras -->
+    <div id="info-panel" class="ui-panel hidden">
+        <div class="panel-content">
+            <button id="close-info" class="close-btn">&times;</button>
+            <div id="painting-info">
+                <!-- Conteúdo será preenchido dinamicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Cena A-Frame -->
+    <a-scene 
+        id="museum-scene"
+        embedded 
+        style="height: 100vh; width: 100vw;"
+        vr-mode-ui="enabled: true"
+        background="color: #000"
+        loading-screen="enabled: false">
+        
+        <!-- Assets -->
+        <a-assets>
+            <!-- Imagens das obras -->
+            <img id="monalisa-img" src="assets/images/paintings/monalisa.jpg">
+            <img id="starry-night-img" src="assets/images/paintings/starry_night.jpg">
+            <img id="scream-img" src="assets/images/paintings/the_scream.jpg">
+            <img id="sunflowers-img" src="assets/images/paintings/sunflowers.jpg">
+            <img id="guernica-img" src="assets/images/paintings/guernica.jpg">
+        </a-assets>
+
+        <!-- Ambiente do museu -->
+        <a-entity 
+            id="museum-environment"
+            environment="preset: forest; groundColor: #445; grid: cross">
+        </a-entity>
+
+        <!-- Iluminação -->
+        <a-light type="ambient" color="#404040" intensity="0.4"></a-light>
+        <a-light type="directional" position="0 10 0" color="#ffffff" intensity="0.6"></a-light>
+
+        <!-- Câmera e controles -->
+        <a-entity id="camera-rig" position="0 1.6 3">
+            <a-camera 
+                id="main-camera"
+                look-controls="enabled: true"
+                wasd-controls="enabled: true"
+                cursor="rayOrigin: mouse; fuse: false"
+                raycaster="objects: .interactive; far: 20">
+                
+                <!-- Cursor visual -->
+                <a-cursor
+                    id="cursor"
+                    position="0 0 -1"
+                    geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+                    material="color: white; shader: flat"
+                    animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
+                    animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1">
+                </a-cursor>
+            </a-camera>
+        </a-entity>
+
+        <!-- Controladores VR -->
+        <a-entity 
+            id="left-hand"
+            hand-controls="hand: left; handModelStyle: lowPoly; color: #ffcccc"
+            laser-controls="hand: left"
+            raycaster="objects: .interactive; far: 10"
+            line="color: #FF0000; opacity: 0.5">
+        </a-entity>
+        
+        <a-entity 
+            id="right-hand"
+            hand-controls="hand: right; handModelStyle: lowPoly; color: #ffcccc"
+            laser-controls="hand: right"
+            raycaster="objects: .interactive; far: 10"
+            line="color: #FF0000; opacity: 0.5">
+        </a-entity>
+
+        <!-- Container das obras de arte -->
+        <a-entity id="paintings-container" position="0 0 0">
+            <!-- As obras serão adicionadas via JavaScript -->
+        </a-entity>
+
+        <!-- Chão do museu -->
+        <a-plane 
+            id="museum-floor"
+            position="0 0 0" 
+            rotation="-90 0 0" 
+            width="20" 
+            height="20" 
+            color="#8B7355"
+            material="roughness: 0.8">
+        </a-plane>
+
+        <!-- Paredes do museu -->
+        <a-entity id="museum-walls">
+            <!-- Parede frontal -->
+            <a-plane position="0 2.5 -8" width="16" height="5" color="#F5F5DC"></a-plane>
+            <!-- Parede traseira -->
+            <a-plane position="0 2.5 8" rotation="0 180 0" width="16" height="5" color="#F5F5DC"></a-plane>
+            <!-- Parede esquerda -->
+            <a-plane position="-8 2.5 0" rotation="0 90 0" width="16" height="5" color="#F5F5DC"></a-plane>
+            <!-- Parede direita -->
+            <a-plane position="8 2.5 0" rotation="0 -90 0" width="16" height="5" color="#F5F5DC"></a-plane>
+        </a-entity>
+
+        <!-- Teto -->
+        <a-plane 
+            position="0 5 0" 
+            rotation="90 0 0" 
+            width="16" 
+            height="16" 
+            color="#FFFFFF"
+            material="roughness: 0.9">
+        </a-plane>
+    </a-scene>
+
+    <!-- Scripts -->
+    <script src="js/paintings-data.js"></script>
+    <script src="js/interaction.js"></script>
+    <script src="js/ui-controller.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
+

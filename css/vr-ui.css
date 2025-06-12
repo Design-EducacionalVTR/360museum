@@ -1,0 +1,192 @@
+/* Estilos específicos para VR */
+
+/* Ocultar elementos de UI quando em modo VR */
+.a-enter-vr .ui-panel {
+    display: none !important;
+}
+
+/* Ajustes para o cursor em VR */
+.a-enter-vr #cursor {
+    opacity: 0;
+}
+
+/* Estilos para controladores VR */
+a-entity[hand-controls] {
+    pointer-events: auto;
+}
+
+/* Raycaster visual para VR */
+a-entity[line] {
+    pointer-events: none;
+}
+
+/* Ajustes de interface para VR */
+.a-enter-vr #loading-screen {
+    display: none;
+}
+
+/* Elementos interativos em VR */
+.a-enter-vr .interactive {
+    cursor: pointer;
+}
+
+/* Feedback visual para hover em VR */
+.interactive:hover {
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+/* Painéis informativos em VR - serão criados dinamicamente no espaço 3D */
+.vr-info-panel {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 0.1;
+    padding: 0.2;
+}
+
+/* Texto em VR */
+.vr-text {
+    color: #333;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.15;
+    line-height: 1.4;
+}
+
+.vr-title {
+    color: #2c3e50;
+    font-size: 0.2;
+    font-weight: bold;
+}
+
+.vr-subtitle {
+    color: #7f8c8d;
+    font-size: 0.12;
+    font-style: italic;
+}
+
+/* Botões em VR */
+.vr-button {
+    background: #667eea;
+    color: white;
+    border-radius: 0.05;
+    padding: 0.1;
+    cursor: pointer;
+}
+
+.vr-button:hover {
+    background: #5a6fd8;
+}
+
+/* Indicadores de interação em VR */
+.interaction-indicator {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+}
+
+/* Ajustes para diferentes tipos de headsets */
+@media (max-width: 1024px) {
+    .vr-text {
+        font-size: 0.18;
+    }
+    
+    .vr-title {
+        font-size: 0.22;
+    }
+}
+
+/* Otimizações de performance para VR */
+.a-enter-vr * {
+    will-change: transform;
+}
+
+/* Redução de elementos visuais complexos em VR */
+.a-enter-vr .loading-spinner {
+    display: none;
+}
+
+/* Ajustes de iluminação para VR */
+.a-enter-vr a-light[type="ambient"] {
+    intensity: 0.5;
+}
+
+.a-enter-vr a-light[type="directional"] {
+    intensity: 0.7;
+}
+
+/* Configurações específicas para Oculus Quest */
+@media (orientation: landscape) and (max-device-width: 1440px) {
+    .vr-text {
+        font-size: 0.16;
+    }
+}
+
+/* Configurações específicas para HTC Vive */
+@media (min-device-width: 2160px) {
+    .vr-text {
+        font-size: 0.14;
+    }
+    
+    .vr-title {
+        font-size: 0.18;
+    }
+}
+
+/* Feedback háptico visual */
+.haptic-feedback {
+    animation: hapticPulse 0.1s ease-out;
+}
+
+@keyframes hapticPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Transições suaves para elementos VR */
+.vr-transition {
+    transition: all 0.3s ease;
+}
+
+/* Estados de foco para acessibilidade em VR */
+.vr-focused {
+    outline: 0.02 solid #667eea;
+    outline-offset: 0.05;
+}
+
+/* Ajustes para modo noturno em VR */
+.vr-dark-mode {
+    background: rgba(0, 0, 0, 0.8);
+    color: #ffffff;
+}
+
+.vr-dark-mode .vr-text {
+    color: #ffffff;
+}
+
+.vr-dark-mode .vr-title {
+    color: #e0e0e0;
+}
+
+.vr-dark-mode .vr-subtitle {
+    color: #b0b0b0;
+}
+
