@@ -53,7 +53,7 @@ class InteractionManager {
         const frame = document.createElement('a-box');
         frame.setAttribute('width', position.scale.x + 0.2);
         frame.setAttribute('height', position.scale.y + 0.2);
-        frame.setAttribute('depth', 0.1);
+        frame.setAttribute('depth', 0.09);
         frame.setAttribute('color', '#8B4513');
         frame.setAttribute('material', 'roughness: 0.8; metalness: 0.2');
         frame.setAttribute('position', '0 0 -0.05');
